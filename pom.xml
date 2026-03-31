@@ -88,6 +88,13 @@
             <version>${knife4j.version}</version>
         </dependency>
 
+        <!-- SpringDoc OpenAPI -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+
         <!-- Hutool 工具库 -->
         <dependency>
             <groupId>cn.hutool</groupId>
