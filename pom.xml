@@ -70,7 +70,12 @@
 
         <!-- Knife4j 基于 SpringDoc 支持 OpenAPI -->
         <!-- Knife4j 4.x 版本 changed artifactId from knife4j-springdoc-ui to knife4j-openapi2-spring-boot-starter -->
-        <!-- 注意：knife4j-openapi2-spring-boot-starter 已经内置包含了 springdoc-openapi-ui，不需要重复引入 -->
+        <!-- Knife4j 只提供 UI，需要 springdoc-openapi-ui 提供 OpenAPI 注解 -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.7.0</version>
+        </dependency>
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>
