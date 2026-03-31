@@ -75,7 +75,7 @@ public class FishServiceImpl implements FishService {
             int seaArea = user.getUnlockedSeaArea();
             LambdaQueryWrapper<Creature> wrapper = new LambdaQueryWrapper<>();
             wrapper.le(Creature::getSeaArea, seaArea);
-            var list = creatureMapper.selectList(wrapper);
+            List<Creature> list = creatureMapper.selectList(wrapper);
             if (list.isEmpty()) {
                 result.setRewardType("bait");
                 int baitAmount = 15;
@@ -120,7 +120,7 @@ public class FishServiceImpl implements FishService {
             LambdaQueryWrapper<Creature> wrapper = new LambdaQueryWrapper<>();
             wrapper.le(Creature::getSeaArea, seaArea);
             wrapper.ge(Creature::getLevel, Math.max(10, user.getMaxLevel() - 5));
-            var list = creatureMapper.selectList(wrapper);
+            List<Creature> list = creatureMapper.selectList(wrapper);
 
             Creature rewardCreature;
             if (list.isEmpty()) {
