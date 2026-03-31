@@ -1,26 +1,38 @@
 package com.horseracing.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.horseracing.entity.User;
+import com.horseracing.dto.WxLoginDTO;
+import com.horseracing.vo.UserInfoVO;
 
 /**
- * 用户 Service 接口
+ * 用户服务接口
+ *
+ * @author rzf
  */
 public interface UserService extends IService<User> {
 
     /**
-     * 根据 openid 获取用户信息
-     * @param openid 微信 openid
+     * 微信登录
+     *
+     * @param dto 登录参数
      * @return 用户信息
      */
-    User getByOpenid(String openid);
+    UserInfoVO wxLogin(WxLoginDTO dto);
 
     /**
-     * 分页查询用户列表
-     * @param current 当前页
-     * @param size 每页大小
-     * @return 分页结果
+     * 获取用户信息
+     *
+     * @param userId 用户ID
+     * @return 用户信息
      */
-    Page<User> pageList(long current, long size);
+    UserInfoVO getUserInfo(Long userId);
+
+    /**
+     * 领取离线收益
+     *
+     * @param userId 用户ID
+     * @return 获得的饵料数量
+     */
+    Integer collectOfflineIncome(Long userId);
 }

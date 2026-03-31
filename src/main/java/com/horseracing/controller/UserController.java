@@ -1,23 +1,18 @@
 package com.horseracing.controller;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.horseracing.common.Result;
-import com.horseracing.entity.User;
+import com.horseracing.dto.WxLoginDTO;
 import com.horseracing.service.UserService;
 import com.horseracing.vo.UserInfoVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * 用户接口
+ * 用户控制器
+ *
+ * @author rzf
  */
-@Api(tags = "用户管理接口")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -26,86 +21,35 @@ public class UserController {
     private UserService userService;
 
     /**
-     * 根据ID获取用户详情
+     * 微信登录
      */
-    @ApiOperation("获取用户详情")
-    @GetMapping("/{id}")
-    public Result<UserInfoVO> getById(@PathVariable Long id) {
-        User user = userService.getById(id);
-        if (user == null) {
-            return Result.error("用户不存在");
+    @PostMapping("/wx-login")
+    public Result<UserInfoVO> wxLogin(@Validated @RequestBody WxLoginDTO dto) {
+        UserInfoVO vo = userService.wxLogin(dto);
+        if (vo == null) {
+            return Result.error(400, "微信登录失败，请重试");
         }
-        return Result.success(convertToVO(user));
+        return Result.success(vo);
     }
 
     /**
-     * 分页查询用户列表
+     * 获取用户信息
      */
-    @ApiOperation("分页查询用户列表")
-    @GetMapping("/page")
-    public Result<Page<UserInfoVO>> pageList(
-            @RequestParam(defaultValue = "1") long current,
-            @RequestParam(defaultValue = "10") long size) {
-        Page<User> page = userService.pageList(current, size);
-        // 转换为 VO
-        Page<UserInfoVO> voPage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
-        List<UserInfoVO> voList = new ArrayList<>();
-        for (User user : page.getRecords()) {
-            voList.add(convertToVO(user));
+    @GetMapping("/info/{userId}")
+    public Result<UserInfoVO> getUserInfo(@PathVariable Long userId) {
+        UserInfoVO vo = userService.getUserInfo(userId);
+        if (vo == null) {
+            return Result.error(404, "用户不存在");
         }
-        voPage.setRecords(voList);
-        return Result.success(voPage);
+        return Result.success(vo);
     }
 
     /**
-     * 新增用户
+     * 领取离线收益
      */
-    @ApiOperation("新增用户")
-    @PostMapping
-    public Result<Long> add(@RequestBody User user) {
-        userService.save(user);
-        return Result.success(user.getId());
-    }
-
-    /**
-     * 更新用户
-     */
-    @ApiOperation("更新用户信息")
-    @PutMapping("/{id}")
-    public Result<Void> update(@PathVariable Long id, @RequestBody User user) {
-        user.setId(id);
-        boolean success = userService.updateById(user);
-        if (success) {
-            return Result.success();
-        }
-        return Result.error("更新失败");
-    }
-
-    /**
-     * 删除用户
-     */
-    @ApiOperation("删除用户")
-    @DeleteMapping("/{id}")
-    public Result<Void> delete(@PathVariable Long id) {
-        boolean success = userService.removeById(id);
-        if (success) {
-            return Result.success();
-        }
-        return Result.error("删除失败");
-    }
-
-    /**
-     * Entity 转换为 VO
-     */
-    private UserInfoVO convertToVO(User user) {
-        UserInfoVO vo = new UserInfoVO();
-        BeanUtils.copyProperties(user, vo);
-        // 计算胜率
-        if (user.getTotalGames() != null && user.getTotalGames() > 0 && user.getWinGames() != null) {
-            vo.setWinRate((double) user.getWinGames() / user.getTotalGames() * 100);
-        } else {
-            vo.setWinRate(0.0);
-        }
-        return vo;
+    @PostMapping("/collect-offline-income/{userId}")
+    public Result<Integer> collectOfflineIncome(@PathVariable Long userId) {
+        Integer income = userService.collectOfflineIncome(userId);
+        return Result.success(income);
     }
 }

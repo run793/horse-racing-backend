@@ -9,56 +9,36 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * 用户实体
+ * 用户庭院实体（神兽放置）
  *
  * @author rzf
  */
 @Data
-@TableName("user")
-public class User {
+@TableName("user_yard")
+public class UserYard {
 
     @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
-     * 微信openid
+     * 用户ID
      */
-    private String openid;
+    private Long userId;
 
     /**
-     * 微信昵称
+     * 槽位ID 1-8（初始1个，后续解锁）
      */
-    private String nickname;
+    private Integer slotId;
 
     /**
-     * 头像URL
+     * 放置的生物ID 为空表示未放置
      */
-    private String avatarUrl;
+    private Long creatureId;
 
     /**
-     * 当前饵料数量
+     * 解锁状态 0-未解锁 1-已解锁
      */
-    private Integer currentBait;
-
-    /**
-     * 已解锁海域ID
-     */
-    private Integer unlockedSeaArea;
-
-    /**
-     * 最大合成等级
-     */
-    private Integer maxLevel;
-
-    /**
-     * 离线收益计算时间
-     */
-    private LocalDateTime offlineIncomeTime;
-
-    /**
-     * 最后蹭饵料时间
-     */
-    private LocalDateTime lastStealTime;
+    private Integer isUnlocked;
 
     /**
      * 创建时间

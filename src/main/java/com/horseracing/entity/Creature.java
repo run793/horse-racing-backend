@@ -9,56 +9,56 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * 用户实体
+ * 海洋生物配置实体
  *
  * @author rzf
  */
 @Data
-@TableName("user")
-public class User {
+@TableName("creature")
+public class Creature {
 
     @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
-     * 微信openid
+     * 生物名称
      */
-    private String openid;
+    private String name;
 
     /**
-     * 微信昵称
+     * 生物等级 1-30
      */
-    private String nickname;
+    private Integer level;
 
     /**
-     * 头像URL
+     * 所属海域 1-3
      */
-    private String avatarUrl;
+    private Integer seaArea;
 
     /**
-     * 当前饵料数量
+     * 合成需要的两个低级生物ID
      */
-    private Integer currentBait;
+    private String combineFrom;
 
     /**
-     * 已解锁海域ID
+     * 图片资源路径
      */
-    private Integer unlockedSeaArea;
+    private String imageUrl;
 
     /**
-     * 最大合成等级
+     * 科普文案
      */
-    private Integer maxLevel;
+    private String description;
 
     /**
-     * 离线收益计算时间
+     * 是否神兽 0-否 1-是
      */
-    private LocalDateTime offlineIncomeTime;
+    private Integer isMythical;
 
     /**
-     * 最后蹭饵料时间
+     * 合成所需饵料
      */
-    private LocalDateTime lastStealTime;
+    private Integer combineCost;
 
     /**
      * 创建时间

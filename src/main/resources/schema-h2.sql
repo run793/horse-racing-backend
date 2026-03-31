@@ -1,0 +1,107 @@
+
+-- 《海错图》H2 数据库初始化脚本
+
+-- 1. 用户表
+DROP TABLE IF EXISTS wx_user;
+CREATE TABLE wx_user (
+    id BIGINT NOT NULL auto_increment PRIMARY KEY,
+    openid VARCHAR(100) NOT NULL,
+    nickname VARCHAR(100),
+    avatar_url VARCHAR(500),
+    current_bait INT NOT NULL DEFAULT 0,
+    unlocked_sea_area INT NOT NULL DEFAULT 1,
+    max_level INT NOT NULL DEFAULT 1,
+    offline_income_time TIMESTAMP NOT NULL,
+    last_steal_time TIMESTAMP,
+    create_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    update_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    is_deleted TINYINT NOT NULL DEFAULT 0
+);
+
+-- 2. 海洋生物配置表
+DROP TABLE IF EXISTS creature;
+CREATE TABLE creature (
+    id BIGINT NOT NULL auto_increment PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    level INT NOT NULL,
+    sea_area INT NOT NULL,
+    combine_from VARCHAR(50),
+    image_url VARCHAR(500),
+    description TEXT,
+    is_mythical TINYINT NOT NULL DEFAULT 0,
+    combine_cost INT NOT NULL DEFAULT 0,
+    create_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    update_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    is_deleted TINYINT NOT NULL DEFAULT 0
+);
+
+-- 3. 用户生物库存表
+DROP TABLE IF EXISTS user_creature;
+CREATE TABLE user_creature (
+    id BIGINT NOT NULL auto_increment PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    creature_id BIGINT NOT NULL,
+    count INT NOT NULL DEFAULT 0,
+    is_unlocked TINYINT NOT NULL DEFAULT 0,
+    create_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    update_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    is_deleted TINYINT NOT NULL DEFAULT 0
+);
+
+-- 4. 用户庭院表
+DROP TABLE IF EXISTS user_yard;
+CREATE TABLE user_yard (
+    id BIGINT NOT NULL auto_increment PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    slot_id INT NOT NULL,
+    creature_id BIGINT,
+    is_unlocked TINYINT NOT NULL DEFAULT 0,
+    create_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    update_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    is_deleted TINYINT NOT NULL DEFAULT 0
+);
+
+-- 5. 用户图鉴表
+DROP TABLE IF EXISTS user_illustration;
+CREATE TABLE user_illustration (
+    id BIGINT NOT NULL auto_increment PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    creature_id BIGINT NOT NULL,
+    unlock_time TIMESTAMP NOT NULL,
+    create_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    update_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    is_deleted TINYINT NOT NULL DEFAULT 0
+);
+
+-- 插入完整30级生物数据
+INSERT INTO creature (name, level, sea_area, combine_from, description, is_mythical, combine_cost) VALUES
+('磷虾', 1, 1, NULL, '《海错图》记载: \"虾生海中，小者如指，大者盈尺。群游水面，随波逐流.\" 最基础的海洋生物，合成之路从这里开始。', 0, 0),
+('毛虾', 2, 1, '1,1', '《海错图》记载: \"毛虾，生南海，身有细毛，成群结队.\" 体型微小，是合成进阶的基础。', 0, 1),
+('对虾', 3, 1, '2,2', '《海错图》记载: \"对虾，两两相随，雌雄不离。肉嫩味鲜，海中上品.\" 常见的食用虾类，体型较大，肉质鲜美。', 0, 3),
+('基围虾', 4, 1, '3,3', '浅海常见虾类，外壳薄而光滑，肉质细嫩，是近海常见的美味。', 0, 5),
+('龙虾', 5, 1, '4,4', '《海错图》记载: \"龙虾，海中大蟹也，身披坚甲，头有长须，双钳威武.\" 海中珍品，身披坚甲，双钳威武，是浅海海域的顶级猎手。', 0, 8),
+('三疣梭子蟹', 6, 1, '5,5', '《海错图》记载: \"梭子蟹，形如织梭，壳青有纹，肉肥膏满.\" 近海大型蟹类，肉质鲜美，秋季最肥。', 0, 12),
+('石头蟹', 7, 1, '6,6', '《海错图》记载: \"石蟹，生石隙中，壳硬如石，色青黑.\" 善于伪装，外壳坚硬，是浅海岩礁区域的常见生物。', 0, 16),
+('帝王蟹', 8, 1, '7,7', '深海巨无霸，体型巨大，肉质饱满，是浅海海域的终极生物。', 0, 20),
+('巨螯蟹', 9, 1, '8,8', '世界上最大的蟹类之一，腿长可达数米，生活在深海区域。', 0, 25),
+('北海巨妖', 10, 1, '9,9', '北欧传说中的深海巨妖，盘踞在冰冷的北大西洋，吞噬过往船只。传说中它是克拉肯的化身。', 1, 30),
+('带鱼', 11, 2, '10,10', '《海错图》记载: \"带鱼，身如腰带，银光闪闪，肉细无细刺.\" 洄游鱼类，性情凶猛，是餐桌上的常客。', 0, 35),
+('大黄鱼', 12, 2, '11,11', '《海错图》记载: \"黄花鱼，色金黄，头中有石，叫声如雷.\" 中国近海传统四大海产之一，肉质细嫩，味道鲜美。', 0, 40),
+('乌贼', 13, 2, '12,12', '《海错图》记载: \"乌贼，腹中有墨，遇敌则喷墨自蔽.\" 能够喷墨迷惑敌人，腕足灵活，是深海中的智将。', 0, 45),
+('章鱼', 14, 2, '13,13', '《山海经》记载: \"有鱼焉，八足，名曰章鱼.\" 智商超高，变色能力极强，能够拟态周围环境。', 0, 50),
+('鲨鱼', 15, 2, '14,14', '《海错图》记载: \"鲨鱼，海中大鱼也，性凶猛，食人.\" 海洋霸主，处于食物链顶端，嗅觉极其灵敏。', 0, 55),
+('中华鲟', 16, 2, '15,15', '《海错图》记载: \"鲟鱼，体长丈余，骨软骨硬，肉肥美.\" 活化石，一亿五千万年前就生活在这片海域，中国一级保护动物。', 0, 60),
+('抹香鲸', 17, 2, '16,16', '潜水最深的哺乳动物，能够下潜到数千米深海捕猎大王乌贼，体内盛产龙涎香。', 0, 65),
+('大王乌贼', 18, 2, '17,17', '深海巨怪，体长可达20米，和抹香鲸是永恒的宿敌，很少被人类发现。', 0, 70),
+('狮鬃水母', 19, 2, '18,18', '世界上最大的水母之一，伞状体可达数米，触手上布满剧毒，是深海中的幽灵。', 0, 75),
+('利维坦', 20, 2, '19,19', '《圣经》记载的海中巨兽，象征着混沌与力量，是海洋深处的绝对主宰。', 1, 80),
+('金枪鱼', 21, 3, '20,20', '海洋中最快的鱼类之一，流线型身体，能够持续高速游泳，是远洋顶级掠食者。', 0, 85),
+('旗鱼', 22, 3, '21,21', '背鳍如旗，速度极快，是海洋中短跑冠军，时速可达上百公里。', 0, 90),
+('蝠鲼', 23, 3, '22,22', '《海错图》记载: \"鲾鲼，形如蝙蝠，翅展丈余，泳姿优雅.\" 又称魔鬼鱼，性格温顺，在深海中翩翩起舞。', 0, 95),
+('座头鲸', 24, 3, '23,23', '海洋歌唱家，每年都会洄游，唱出复杂优美的歌曲，是海洋中最有艺术细胞的巨兽。', 0, 100),
+('蓝鲸', 25, 3, '24,24', '地球上体型最大的动物，心脏就有小汽车那么大，以微小的磷虾为食。', 0, 110),
+('大王酸浆鱿', 26, 3, '25,25', '比大王乌贼更大更深，生活在南极深海，眼睛直径可达半米，是真正的深海巨兽。', 0, 120),
+('巨齿鲨', 27, 3, '26,26', '史前海洋霸主，咬合力远超霸王龙，统治着远古海洋，已经灭绝两百多万年。', 0, 130),
+('沧龙', 28, 3, '27,27', '白垩纪晚期海洋顶级掠食者，体长可达20米，统治着中生代的海洋。', 0, 140),
+('蛇颈龙', 29, 3, '28,28', '脖子长长的史前海洋爬行动物，称霸侏罗纪海洋，温柔的巨兽。', 0, 150),
+('蛟龙', 30, 3, '29,29', '《山海经》记载: \"蛟，龙之属也，潜于深渊，能兴云雨.\" 传说中蛟龙入水，千年化为龙，是中国神话中的深海神兽。', 1, 160);

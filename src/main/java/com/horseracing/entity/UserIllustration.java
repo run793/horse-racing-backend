@@ -9,56 +9,31 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * 用户实体
+ * 用户图鉴点亮记录实体
  *
  * @author rzf
  */
 @Data
-@TableName("user")
-public class User {
+@TableName("user_illustration")
+public class UserIllustration {
 
     @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
-     * 微信openid
+     * 用户ID
      */
-    private String openid;
+    private Long userId;
 
     /**
-     * 微信昵称
+     * 生物ID
      */
-    private String nickname;
+    private Long creatureId;
 
     /**
-     * 头像URL
+     * 点亮时间
      */
-    private String avatarUrl;
-
-    /**
-     * 当前饵料数量
-     */
-    private Integer currentBait;
-
-    /**
-     * 已解锁海域ID
-     */
-    private Integer unlockedSeaArea;
-
-    /**
-     * 最大合成等级
-     */
-    private Integer maxLevel;
-
-    /**
-     * 离线收益计算时间
-     */
-    private LocalDateTime offlineIncomeTime;
-
-    /**
-     * 最后蹭饵料时间
-     */
-    private LocalDateTime lastStealTime;
+    private LocalDateTime unlockTime;
 
     /**
      * 创建时间
